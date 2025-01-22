@@ -17,21 +17,26 @@ const colors: Colors  = {
 export class SChat implements IHandler{
     private m_connection: Socket;
     private m_io :Server;
+    name: any;
 
     constructor(p_connection:Socket, p_io: Server){
         this.m_connection = p_connection;
         this.m_io = p_io;
     }
-    Enter(){
-        this.SendAll(`${colors.yellow} ${userDatabase.Find(this.m_connection)?.Name()} has entered the room`)
+    async Enter(){
+
+      const user = await userDatabase.Find(this.m_connection.id);
+      console.log(`user ${user}`) 
+
+      // this.SendAll(`${colors.yellow} ${user?.Name()} has entered the room`)
     }
 
-    Leave(){
-        userDatabase.DeleteUser(this.m_connection);
+    async Leave(){
+        await userDatabase.DeleteUser(this.name);
     }
 
-    Handle(p_data: string | string[]){
-        var name = userDatabase.Find(this.m_connection)?.Name();
+    async Handle(p_data: string | string[]){
+      //  this.name = (await userDatabase.Find(this.m_connection))?.Name();
 
        // if(p_data[0] == '/'){
          //   const command = p_data.toLowerCase().trim();

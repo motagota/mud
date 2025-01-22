@@ -8,7 +8,6 @@ for (let i = 0; i < NUM_USERS; i++) {
     socket.on("connect", () => {
         console.log(`User ${i} connected with id: ${socket.id}`);
         // Simulate user actions
-        socket.emit("command", "login");
         socket.emit("command", `username${i}`);
     });
     socket.on("message", (message) => {

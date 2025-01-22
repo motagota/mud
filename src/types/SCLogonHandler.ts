@@ -28,21 +28,23 @@ export class SCLogonHandler implements IHandler {
         this.m_connection.emit("message",`${colors.chat}Please Enter you user name: `)
     }
 
-    Handle(p_data:string){
+    async Handle(p_data:string){
         console.log(`handle ${p_data}`)
 
         // doesn't contain invalid characters
         if( !userDatabase.IsValidUserName(p_data)) {
             this.m_connection.emit("message", `${colors.error}Sorry, that is an invalid username`)
             this.m_connection.emit("message", `${colors.chat}Please enter another username: `)
-
+            return;
         }
 
         // username doesn't already exist
-        
-        if(userDatabase.HasUser(p_data)){
+        const user = await userDatabase.HasUser(p_data)
+        console.log(`user ${user}`)
+        if(user){
             this.m_connection.emit("message", `${colors.error}Sorry, that is username is already in use`)
             this.m_connection.emit("message", `${colors.chat}Please enter another username: `)
+            return;
         }
 
         // user name passed the checks so create a new user

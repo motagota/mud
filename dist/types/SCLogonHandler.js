@@ -24,17 +24,21 @@ class SCLogonHandler {
     Enter() {
         this.m_connection.emit("message", `${colors.chat}Please Enter you user name: `);
     }
-    Handle(p_data) {
+    async Handle(p_data) {
         console.log(`handle ${p_data}`);
         // doesn't contain invalid characters
         if (!userDatabase_1.userDatabase.IsValidUserName(p_data)) {
             this.m_connection.emit("message", `${colors.error}Sorry, that is an invalid username`);
             this.m_connection.emit("message", `${colors.chat}Please enter another username: `);
+            return;
         }
         // username doesn't already exist
-        if (userDatabase_1.userDatabase.HasUser(p_data)) {
+        const user = await userDatabase_1.userDatabase.HasUser(p_data);
+        console.log(`user ${user}`);
+        if (user) {
             this.m_connection.emit("message", `${colors.error}Sorry, that is username is already in use`);
             this.m_connection.emit("message", `${colors.chat}Please enter another username: `);
+            return;
         }
         // user name passed the checks so create a new user
         userDatabase_1.userDatabase.AddUser(new userDatabase_1.User(p_data, this.m_connection));

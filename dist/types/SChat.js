@@ -20,14 +20,16 @@ class SChat {
         this.m_connection = p_connection;
         this.m_io = p_io;
     }
-    Enter() {
-        this.SendAll(`${colors.yellow} ${userDatabase_1.userDatabase.Find(this.m_connection)?.Name()} has entered the room`);
+    async Enter() {
+        const user = await userDatabase_1.userDatabase.Find(this.m_connection.id);
+        console.log(`user ${user}`);
+        // this.SendAll(`${colors.yellow} ${user?.Name()} has entered the room`)
     }
-    Leave() {
-        userDatabase_1.userDatabase.DeleteUser(this.m_connection);
+    async Leave() {
+        await userDatabase_1.userDatabase.DeleteUser(this.name);
     }
-    Handle(p_data) {
-        var name = userDatabase_1.userDatabase.Find(this.m_connection)?.Name();
+    async Handle(p_data) {
+        //  this.name = (await userDatabase.Find(this.m_connection))?.Name();
         // if(p_data[0] == '/'){
         //   const command = p_data.toLowerCase().trim();
         //   const message = p_data.substring(4);
